@@ -1,23 +1,14 @@
-"""
+#!/usr/bin/env python3
+""" __main__.py
+
 Entrypoint for qiagen_upload
 """
 import os
-import shutil
 import argparse
 from . import qiagen_upload
-
-
-def is_valid_file(parser: argparse.ArgumentParser, arg: str) -> str:
-    """
-    Check file path is valid
-        :param parser (argparse.ArgumentParser):    Holds necessary info to parse cmd
-                                                    line into Python data types
-        :param arg (str):                           Input argument
-    """
-    if not os.path.exists(arg):
-        parser.error(f"The file {arg} does not exist!")
-    else:
-        return arg  # Return argument
+from logger import Logger
+import config
+import toolbox
 
 
 def arg_parse() -> dict:
@@ -27,11 +18,13 @@ def arg_parse() -> dict:
     argument parser
         :return (dict): Parsed command line attributes
     """
+    info_string = (
+        "Create sample ZIP and XML, generate access token, and "
+        "upload sample ZIP file to QCII"
+    )
     parser = argparse.ArgumentParser(
-        description=(
-            "Create sample ZIP and XML, generate access token, and upload sample ZIP file to QCII"
-            ),
-        usage=""
+        description=info_string,
+        usage=info_string,
     )
     parser.add_argument(
         "-S",
@@ -43,7 +36,7 @@ def arg_parse() -> dict:
     parser.add_argument(
         "-Z",
         "--sample_path",
-        type=lambda x: is_valid_file(parser, x),
+        type=lambda x: toolbox.is_valid_file(parser, x),
         help="Zipped folder containing variant files",
         required=True,
     )
@@ -73,20 +66,30 @@ def arg_parse() -> dict:
         "--device_code",
         type=str,
         help="Device code generated when obtaining the user code",
-        required=True
+        required=True,
     )
     return vars(parser.parse_args())
 
 
 args = arg_parse()
+outdir = os.path.join(os.getcwd(), "outputs")
+logfile_path = os.path.join(
+    outdir, f"qiagen_upload.{args['sample_name']}.{config.TIMESTAMP}.log"
+)
+logger = Logger(logfile_path).logger
 
-logfile_path = os.path.join(os.getcwd(), f"{args['sample_name']}.qiagen_upload.log")
+if not os.path.isdir(outdir):
+    os.mkdir(outdir)
 
-create_zip = qiagen_upload.AddXMLtoZIP(args['sample_name'], args['sample_path'])
+logger.info("Running qiagen_upload %s - qiagen_upload", toolbox.git_tag())
+
+create_zip = qiagen_upload.CreateZIP(args["sample_name"], args["sample_path"], logger)
 
 qiagen_upload.UploadToQiagen(
-    args['client_id'], args['client_secret'], args['code_verifier'],
-    args['device_code'], create_zip.output_zip, args['sample_name']
-    )
-
-shutil.rmtree(create_zip.outdir)
+    args["client_id"],
+    args["client_secret"],
+    args["code_verifier"],
+    args["device_code"],
+    create_zip.output_zip,
+    logger,
+)
