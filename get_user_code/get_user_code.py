@@ -64,13 +64,13 @@ class GetUserCode:
         self.user_code, self.device_code = self.generate_device_code()
         self.outdir = outdir
         self.code_verifier_file = os.path.join(
-            self.outdir, f"qiagen_code_verifier_{config.TIMESTAMP}.txt"
+            self.outdir, f"qiagen_code_verifier_{config.TIMESTAMP}"
         )
         self.user_code_file = os.path.join(
-            self.outdir, f"qiagen_user_code_{config.TIMESTAMP}.txt"
+            self.outdir, f"qiagen_user_code_{config.TIMESTAMP}"
         )
         self.device_code_file = os.path.join(
-            self.outdir, f"qiagen_device_code_{config.TIMESTAMP}.txt"
+            self.outdir, f"qiagen_device_code_{config.TIMESTAMP}"
         )
         self.write_code_to_file(
             self.code_verifier_file, "code_verifier", self.code_verifier
