@@ -15,7 +15,7 @@ import toolbox
 
 class CreateZIP:
     """
-    Class to add the create the final ZIP file for upload to QCII
+    Class to create the final ZIP file for upload to QCII
 
     Attributes
         sample_name (str):              Sample name
@@ -127,7 +127,8 @@ class CreateZIP:
 
 class CreateXML:
     """
-    Class to create the XML for the QCI sample upload
+    Class to create the XML for the QCI sample upload. Qiagen requires an XML metadata
+    file for every sample uploaded via the API
 
     Attributes
         sample_name (str):                      Sample name

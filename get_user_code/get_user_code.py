@@ -2,7 +2,7 @@
 """ get_user_code.py
 
 Get user_code required to register the device in QCII, and device_code and
-code_verifier required for use when runnign the qiagen_upload module
+code_verifier required for use when running the qiagen_upload module
 """
 import sys
 import os
