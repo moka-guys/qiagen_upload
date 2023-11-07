@@ -1,0 +1,5 @@
+<QCISampleOnlyUpload xmlns="http://qci.qiagen.com/xsd/interpret" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://qci.qiagen.com/xsd/interpret ../schema/QCISampleOnlyUpload.xsd " version="1.18.0">
+    <Sample>
+        <VariantsFilenames></VariantsFilenames>
+    </Sample>
+</QCISampleOnlyUpload>
