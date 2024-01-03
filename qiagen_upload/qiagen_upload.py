@@ -372,12 +372,14 @@ class UploadToQiagen:
         access_token (str):         QCII API access token
 
     Methods
-        encode_clientid()
+        encode_clientid(client_id, client_secret)
             Encode client_id:client_secret as base64
         generate_access_token()
             Generate access token for use in uploading samples
         upload_sample()
             Make API call to upload sample to QCII
+        remove_zip()
+            Remove zip file after upload
     """
 
     def __init__(
@@ -469,9 +471,25 @@ class UploadToQiagen:
             self.logger.info("Executing the command to upload the sample to QCII")
             toolbox.execute_subprocess_command(sample_upload_cmd, self.logger)
             self.logger.info("Sample upload was successful")
+            self.remove_zip()
         except Exception as exception:
             self.logger.error(
                 "An error was encountered when executing the QCII sample upload "
                 f"command: {exception}."
+            )
+            sys.exit(1)
+
+    def remove_zip(self) -> None:
+        """
+        Remove zip file after upload
+            :return None:
+        """
+        try:
+            os.remove(self.filepath_to_upload)
+            self.logger.info("Local copy of XML zip file deleted after upload")
+        except Exception as exception:
+            self.logger.error(
+                "An error was encountered attempting to remove the local copy of "
+                f"the XML zip file: {exception}"
             )
             sys.exit(1)
