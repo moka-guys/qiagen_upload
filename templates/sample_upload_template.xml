@@ -2,4 +2,7 @@
     <Sample>
         <VariantsFilenames></VariantsFilenames>
     </Sample>
+    <Reviewers>
+        <Reviewer>TSO-500</Reviewer>
+    </Reviewers>
 </QCISampleOnlyUpload>
