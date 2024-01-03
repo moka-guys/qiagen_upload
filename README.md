@@ -52,8 +52,6 @@ Create sample ZIP and XML, generate access token, and upload sample ZIP file to 
 
 options:
   -h, --help            show this help message and exit
-  -S SAMPLE_NAME, --sample_name SAMPLE_NAME
-                        Sample name string
   -Z SAMPLE_PATH, --sample_path SAMPLE_PATH
                         Zipped folder containing variant files
   -CI CLIENT_ID, --client_id CLIENT_ID
@@ -68,7 +66,7 @@ options:
 
 The script can be run as follows:
 ```bash
-python3 -m qiagen_upload -S $SAMPLE_NAME -Z /qiagen_upload/$SAMPLE_ZIP.zip -CI $CLIENT_ID -CS $CLIENT_SECRET -C $CODE_VERIFIER -D $DEVICE_CODE
+python3 -m qiagen_upload -Z /qiagen_upload/$SAMPLE_ZIP.zip -CI $CLIENT_ID -CS $CLIENT_SECRET -C $CODE_VERIFIER -D $DEVICE_CODE
 ```
 #### Outputs
 
@@ -104,7 +102,7 @@ sudo docker run -it --rm -v $PATH_TO_OUTDIR:/outputs/ seglh/qiagen_upload:$TAG g
 [qiagen_upload](qiagen_upload) can be run as follows:
 
 ```bash
-sudo docker run -it --rm -v $PATH_TO_OUTDIR:/qiagen_upload/outputs/ -v $PATH_TO_SAMPLE_ZIP:/qiagen_upload/$SAMPLE_ZIP.zip seglh/qiagen_upload:$TAG qiagen_upload -S $SAMPLE_NAME -Z /qiagen_upload/$SAMPLE_ZIP.zip -CI $CLIENT_ID -CS $CLIENT_SECRET -C $CODE_VERIFIER -D $DEVICE_CODE
+sudo docker run -it --rm -v $PATH_TO_OUTDIR:/qiagen_upload/outputs/ -v $PATH_TO_SAMPLE_ZIP:/qiagen_upload/$SAMPLE_ZIP.zip seglh/qiagen_upload:$TAG qiagen_upload -Z /qiagen_upload/$SAMPLE_ZIP.zip -CI $CLIENT_ID -CS $CLIENT_SECRET -C $CODE_VERIFIER -D $DEVICE_CODE
 ```
 
 ### Developed by the Synnovis Genome Informatics Team

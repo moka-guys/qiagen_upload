@@ -58,7 +58,7 @@ class CreateZIP:
             "CombinedVariantOutput.tsv",
             "MergedSmallVariants.genome.vcf",
         ]
-        xml_obj = CreateXML(sample_name, self.logger)
+        xml_obj = CreateXML(self.sample_name, self.logger)
         self.xml_path = xml_obj.xml_outfile
         self.xml_name = xml_obj.xml_name
         self.outdir = os.path.join(os.getcwd(), "outputs")

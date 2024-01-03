@@ -27,13 +27,6 @@ def arg_parse() -> dict:
         usage=info_string,
     )
     parser.add_argument(
-        "-S",
-        "--sample_name",
-        type=str,
-        help="Sample name string",
-        required=True,
-    )
-    parser.add_argument(
         "-Z",
         "--sample_path",
         type=lambda x: toolbox.is_valid_file(parser, x),
@@ -73,8 +66,10 @@ def arg_parse() -> dict:
 
 args = arg_parse()
 outdir = os.path.join(os.getcwd(), "outputs")
+# Extract sample name from sample path
+sample_name = args["sample_path"].replace('.zip', '').split("/")[-1]
 logfile_path = os.path.join(
-    outdir, f"qiagen_upload.{args['sample_name']}.{config.TIMESTAMP}.log"
+    outdir, f"qiagen_upload.{sample_name}.{config.TIMESTAMP}.log"
 )
 logger = Logger(logfile_path).logger
 
@@ -83,7 +78,7 @@ if not os.path.isdir(outdir):
 
 logger.info("Running qiagen_upload %s - qiagen_upload", toolbox.git_tag())
 
-create_zip = qiagen_upload.CreateZIP(args["sample_name"], args["sample_path"], logger)
+create_zip = qiagen_upload.CreateZIP(sample_name, args["sample_path"], logger)
 
 qiagen_upload.UploadToQiagen(
     args["client_id"],
