@@ -469,9 +469,13 @@ class UploadToQiagen:
                 % (self.access_token, self.filepath_to_upload)
             )
             self.logger.info("Executing the command to upload the sample to QCII")
+<<<<<<< Updated upstream
             toolbox.execute_subprocess_command(sample_upload_cmd, self.logger)
             self.logger.info("Sample upload was successful")
             self.remove_zip()
+=======
+            out = toolbox.execute_subprocess_command(sample_upload_cmd, self.logger)
+>>>>>>> Stashed changes
         except Exception as exception:
             self.logger.error(
                 "An error was encountered when executing the QCII sample upload "

@@ -45,22 +45,33 @@ def git_tag() -> str:
         return "[unversioned]"
 
 
-def check_for_error(proc: subprocess.Popen, logger: object) -> (str, str, int):
+def check_returncode(proc: subprocess.Popen, logger: object) -> (str, str, int):
     """
     Check for success returncode and write to log accordingly
-        :param proc (class):    subprocess.Popen class
-        :param logger (object): Logger
+        :param proc (class):        subprocess.Popen class
+        :param logger (object):     Logger
         :return (stdout(str),
-        stderr(str))(tuple):    Stdout, stderr
+        stderr(str))(tuple):        Outputs from the command
     """
     out, err = proc.communicate()
-    out = json.loads(out.decode("utf-8").strip().splitlines()[-1])
+    out = out.decode("utf-8").strip()
     err = err.decode("utf-8").strip()
-    if out.get("error") is None:
-        logger.info("Command was executed successfully with no error")
-        return out, err
+    returncode = proc.returncode
+
+    if returncode == 0:
+        out = json.loads(out.splitlines()[-1])  # Loads json
+        if out.get("results-url"):
+            logger.info(f"Results url: {out.get('results-url')}")
+        if not out.get("error"):
+            logger.info(f"Command was successful with returncode {returncode}")
+            return out, err
+        if out.get("error"):
+            logger.error(f"Command failed with the following error: '{out.get('error')}'")
+            sys.exit(1)
     else:
-        logger.info(f"Command failed. Stdout: {out}. Stderr: {err}")
+        logger.error(f"Command failed with returncode {returncode}")
+        logger.error(f"Stdout: {out}")
+        logger.error(f"Stderr: {err}")
         sys.exit(1)
 
 
@@ -80,5 +91,5 @@ def execute_subprocess_command(command: str, logger: logging.Logger) -> (str, st
         shell=True,
         executable="/bin/bash",
     )
-    out, err = check_for_error(proc, logger)  # Capture the streams
+    out, err = check_returncode(proc, logger)  # Capture the streams
     return out
